@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IRON PORTFOLIO | Arc Reactor Edition</title>
+  <meta name="description" content="Premium Iron Man–inspired portfolio website built with HTML, CSS, and Vanilla JavaScript." />
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --iron-red: #b11226;
+      --iron-gold: #f5c36a;
+      --arc-blue: #3cf2ff;
+      --dark-bg: #05070a;
+      --panel-bg: rgba(255, 255, 255, 0.06);
+      --glass-border: rgba(255, 255, 255, 0.18);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: radial-gradient(circle at top, #0b0f17, var(--dark-bg));
+      color: #e6e6e6;
+      overflow-x: hidden;
+    }
+
+    /* ================= HEADER ================= */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      backdrop-filter: blur(12px);
+      background: linear-gradient(90deg, rgba(177,18,38,0.35), rgba(0,0,0,0.35));
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .nav {
+      max-width: 1200px;
+      margin: auto;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 800;
+      letter-spacing: 2px;
+      color: var(--iron-gold);
+      text-shadow: 0 0 15px rgba(245,195,106,0.6);
+    }
+
+    .nav ul {
+      display: flex;
+      list-style: none;
+      gap: 28px;
+    }
+
+    .nav a {
+      text-decoration: none;
+      color: #fff;
+      font-weight: 500;
+      position: relative;
+    }
+
+    .nav a::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -6px;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--iron-gold), var(--arc-blue));
+      transition: width 0.3s ease;
+    }
+
+    .nav a:hover::after {
+      width: 100%;
+    }
+
+    /* ================= HERO ================= */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 120px 24px 80px;
+      position: relative;
+    }
+
+    .arc-reactor {
+      position: absolute;
+      width: 320px;
+      height: 320px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(60,242,255,0.9) 0%, rgba(60,242,255,0.15) 40%, transparent 65%);
+      box-shadow: 0 0 80px rgba(60,242,255,0.6);
+      animation: pulse 3s infinite ease-in-out;
+      z-index: 0;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(0.95); opacity: 0.85; }
+      50% { transform: scale(1.05); opacity: 1; }
+    }
+
+    .hero-content {
+      max-width: 900px;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(2.4rem, 6vw, 4.2rem);
+      margin-bottom: 16px;
+      background: linear-gradient(90deg, var(--iron-gold), #ffffff, var(--iron-red));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
+      font-size: 1.1rem;
+      max-width: 680px;
+      margin: 0 auto 32px;
+      opacity: 0.9;
+    }
+
+    .hero .cta {
+      display: inline-block;
+      padding: 14px 34px;
+      border-radius: 40px;
+      background: linear-gradient(135deg, var(--iron-red), var(--iron-gold));
+      color: #000;
+      font-weight: 700;
+      text-decoration: none;
+      box-shadow: 0 0 25px rgba(245,195,106,0.5);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .hero .cta:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 0 40px rgba(245,195,106,0.8);
+    }
+
+    /* ================= SECTIONS ================= */
+    section {
+      max-width: 1200px;
+      margin: auto;
+      padding: 100px 24px;
+    }
+
+    .section-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2rem;
+      margin-bottom: 48px;
+      text-align: center;
+      color: var(--iron-gold);
+    }
+
+    /* ================= CARDS ================= */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 28px;
+    }
+
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+      border: 1px solid var(--glass-border);
+      border-radius: 18px;
+      padding: 28px;
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, transparent, rgba(245,195,106,0.25), transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 0 40px rgba(177,18,38,0.4);
+    }
+
+    .card:hover::before {
+      opacity: 1;
+    }
+
+    .card h3 {
+      font-family: 'Orbitron', sans-serif;
+      margin-bottom: 12px;
+      color: #fff;
+    }
+
+    .card p {
+      font-size: 0.95rem;
+      opacity: 0.9;
+    }
+
+    /* ================= FOOTER ================= */
+    footer {
+      padding: 40px 24px;
+      text-align: center;
+      background: linear-gradient(90deg, rgba(0,0,0,0.7), rgba(177,18,38,0.5));
+      border-top: 1px solid var(--glass-border);
+    }
+
+    footer p {
+      font-size: 0.85rem;
+      opacity: 0.8;
+    }
+
+    /* ================= RESPONSIVE ================= */
+    @media (max-width: 768px) {
+      .nav ul { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <nav class="nav">
+      <div class="logo">ARC•PORT</div>
+      <ul>
+        <li><a href="#about">About</a></li>
+        <li><a href="#skills">Systems</a></li>
+        <li><a href="#projects">Armor</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="arc-reactor"></div>
+    <div class="hero-content">
+      <h1>Powered by Innovation</h1>
+      <p>
+        A premium, Iron Man–inspired portfolio interface engineered with precision,
+        performance, and futuristic design principles.
+      </p>
+      <a href="#projects" class="cta">Activate Systems</a>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <h2 class="section-title">Core Identity</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>Strategic Mind</h3>
+        <p>Focused on scalable solutions, clean architecture, and performance-driven interfaces.</p>
+      </div>
+      <div class="card">
+        <h3>Advanced Design</h3>
+        <p>HUD-inspired UI, glassmorphism layers, and cinematic transitions.</p>
+      </div>
+      <div class="card">
+        <h3>Mission Ready</h3>
+        <p>Engineered for freelancers, developers, and digital architects.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <h2 class="section-title">System Capabilities</h2>
+    <div class="grid">
+      <div class="card"><h3>HTML5</h3><p>Semantic, accessible, and performance-optimized.</p></div>
+      <div class="card"><h3>CSS3</h3><p>Advanced animations, gradients, and responsive layouts.</p></div>
+      <div class="card"><h3>JavaScript</h3><p>Vanilla JS interactions and dynamic UI logic.</p></div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <h2 class="section-title">Armor Modules</h2>
+    <div class="grid">
+      <div class="card"><h3>Mark I</h3><p>Foundational web systems with clean UI.</p></div>
+      <div class="card"><h3>Mark V</h3><p>High-performance portfolio and landing pages.</p></div>
+      <div class="card"><h3>Mark XLII</h3><p>Premium brand-driven digital experiences.</p></div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <h2 class="section-title">Communication Channel</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>Initiate Contact</h3>
+        <p>Email: yourname@email.com<br/>Location: Global / Remote</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2025 Arc Reactor Portfolio. Built with HTML, CSS & Vanilla JavaScript.</p>
+  </footer>
+
+  <script>
+    // Simple scroll reveal
+    const cards = document.querySelectorAll('.card');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.transform = 'translateY(0)';
+          entry.target.style.opacity = '1';
+        }
+      });
+    }, { threshold: 0.15 });
+
+    cards.forEach(card => {
+      card.style.transform = 'translateY(40px)';
+      card.style.opacity = '0';
+      card.style.transition = 'all 0.6s ease';
+      observer.observe(card);
+    });
+  </script>
+
+</body>
+</html>
