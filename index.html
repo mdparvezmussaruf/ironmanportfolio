@@ -320,24 +320,84 @@
   </footer>
 
   <script>
-    // Simple scroll reveal
-    const cards = document.querySelectorAll('.card');
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.style.transform = 'translateY(0)';
-          entry.target.style.opacity = '1';
-        }
-      });
-    }, { threshold: 0.15 });
+  /* ================= JARVIS FOCUS SYSTEM =================
+     Behavior:
+     - Focus mode highlights selected section
+     - Background dims, arc-reactor intensifies
+     - Audio-less visual feedback (professional)
+     - Keyboard + click aware
+  */
 
-    cards.forEach(card => {
-      card.style.transform = 'translateY(40px)';
-      card.style.opacity = '0';
-      card.style.transition = 'all 0.6s ease';
-      observer.observe(card);
+  const sections = document.querySelectorAll('section');
+  const navLinks = document.querySelectorAll('.nav a');
+  const reactor = document.querySelector('.arc-reactor');
+
+  function clearFocus() {
+    sections.forEach(sec => sec.classList.remove('jarvis-focus'));
+    navLinks.forEach(link => link.classList.remove('active'));
+    document.body.classList.remove('focus-active');
+    reactor.classList.remove('reactor-boost');
+  }
+
+  function activateFocus(targetId) {
+    clearFocus();
+    const targetSection = document.querySelector(targetId);
+    if (!targetSection) return;
+
+    targetSection.classList.add('jarvis-focus');
+    document.body.classList.add('focus-active');
+    reactor.classList.add('reactor-boost');
+
+    navLinks.forEach(link => {
+      if (link.getAttribute('href') === targetId) {
+        link.classList.add('active');
+      }
     });
-  </script>
+  }
+
+  navLinks.forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      const targetId = link.getAttribute('href');
+      activateFocus(targetId);
+      document.querySelector(targetId).scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+  });
+
+  // Auto focus on section in viewport
+  const jarvisObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        activateFocus('#' + entry.target.id);
+      }
+    });
+  }, { threshold: 0.6 });
+
+  sections.forEach(sec => sec.id && jarvisObserver.observe(sec));
+
+  // ESC to exit focus mode
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') clearFocus();
+  });
+
+  /* ================= SCROLL REVEAL ================= */
+  const cards = document.querySelectorAll('.card');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.transform = 'translateY(0)';
+        entry.target.style.opacity = '1';
+      }
+    });
+  }, { threshold: 0.15 });
+
+  cards.forEach(card => {
+    card.style.transform = 'translateY(40px)';
+    card.style.opacity = '0';
+    card.style.transition = 'all 0.6s ease';
+    observer.observe(card);
+  });
+</script>
 
 </body>
 </html>
