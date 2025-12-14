@@ -234,9 +234,40 @@
     @media (max-width: 768px) {
       .nav ul { display: none; }
     }
-  </style>
+  /* ================= JARVIS CURSOR SYSTEM ================= */
+    body {
+      cursor: none;
+    }
+
+    .jarvis-cursor {
+      position: fixed;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(circle, var(--arc-blue) 0%, rgba(60,242,255,0.2) 60%, transparent 70%);
+      box-shadow: 0 0 12px rgba(60,242,255,0.8);
+      transition: width 0.15s ease, height 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .jarvis-cursor.focus {
+      width: 120px;
+      height: 120px;
+      box-shadow: 0 0 60px rgba(60,242,255,0.9);
+      animation: jarvis-ring 2s ease-out forwards;
+    }
+
+    @keyframes jarvis-ring {
+      0% { opacity: 1; }
+      70% { opacity: 1; }
+      100% { opacity: 0; }
+    }
+</style>
 </head>
 <body>
+  <div class="jarvis-cursor" id="jarvisCursor"></div>
 
   <!-- HEADER -->
   <header>
@@ -320,64 +351,25 @@
   </footer>
 
   <script>
-  /* ================= JARVIS FOCUS SYSTEM =================
-     Behavior:
-     - Focus mode highlights selected section
-     - Background dims, arc-reactor intensifies
-     - Audio-less visual feedback (professional)
-     - Keyboard + click aware
+  /* ================= JARVIS CURSOR FOCUS SYSTEM =================
+     Replaces default cursor
+     Expands into HUD-style focus ring for 2 seconds on click
   */
 
-  const sections = document.querySelectorAll('section');
-  const navLinks = document.querySelectorAll('.nav a');
-  const reactor = document.querySelector('.arc-reactor');
+  const cursor = document.getElementById('jarvisCursor');
+  let focusTimeout;
 
-  function clearFocus() {
-    sections.forEach(sec => sec.classList.remove('jarvis-focus'));
-    navLinks.forEach(link => link.classList.remove('active'));
-    document.body.classList.remove('focus-active');
-    reactor.classList.remove('reactor-boost');
-  }
-
-  function activateFocus(targetId) {
-    clearFocus();
-    const targetSection = document.querySelector(targetId);
-    if (!targetSection) return;
-
-    targetSection.classList.add('jarvis-focus');
-    document.body.classList.add('focus-active');
-    reactor.classList.add('reactor-boost');
-
-    navLinks.forEach(link => {
-      if (link.getAttribute('href') === targetId) {
-        link.classList.add('active');
-      }
-    });
-  }
-
-  navLinks.forEach(link => {
-    link.addEventListener('click', e => {
-      e.preventDefault();
-      const targetId = link.getAttribute('href');
-      activateFocus(targetId);
-      document.querySelector(targetId).scrollIntoView({ behavior: 'smooth', block: 'center' });
-    });
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
   });
 
-  // Auto focus on section in viewport
-  const jarvisObserver = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        activateFocus('#' + entry.target.id);
-      }
-    });
-  }, { threshold: 0.6 });
-
-  sections.forEach(sec => sec.id && jarvisObserver.observe(sec));
-
-  // ESC to exit focus mode
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') clearFocus();
+  document.addEventListener('click', () => {
+    cursor.classList.add('focus');
+    clearTimeout(focusTimeout);
+    focusTimeout = setTimeout(() => {
+      cursor.classList.remove('focus');
+    }, 2000);
   });
 
   /* ================= SCROLL REVEAL ================= */
